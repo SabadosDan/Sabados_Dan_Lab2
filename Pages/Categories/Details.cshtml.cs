@@ -4,12 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sabados_Dan_Lab2.Data;
 using Sabados_Dan_Lab2.Models;
 
-namespace Sabados_Dan_Lab2.Pages.Books
+namespace Sabados_Dan_Lab2.Pages.Categories
 {
     public class DetailsModel : PageModel
     {
@@ -20,9 +19,8 @@ namespace Sabados_Dan_Lab2.Pages.Books
             _context = context;
         }
 
-        public Book Book { get; set; } = default!;
+        public Category Category { get; set; } = default!;
 
-        public List<string> CategoryNames { get; set; } = new List<string>();
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -30,23 +28,15 @@ namespace Sabados_Dan_Lab2.Pages.Books
                 return NotFound();
             }
 
-            var book = await _context.Book.Include(b => b.Author)
-                .Include(b => b.BookCategories)
-                .ThenInclude(b => b.Category)
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (book == null)
+            var category = await _context.Category.FirstOrDefaultAsync(m => m.ID == id);
+            if (category == null)
             {
                 return NotFound();
             }
             else
             {
-                Book = book;
-                CategoryNames = book.BookCategories.Select(bc => bc.Category.CategoryName).ToList();
+                Category = category;
             }
-
-            ViewData["AuthorID"] = new SelectList(_context.Set<Author>(), "Id", "FullName");
-            ViewData["CategoryID"] = new SelectList(_context.Set<Category>(), "Id", "CategoryName");
-
             return Page();
         }
     }

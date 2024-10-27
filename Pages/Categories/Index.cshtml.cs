@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Sabados_Dan_Lab2.Data;
 using Sabados_Dan_Lab2.Models;
 
-namespace Sabados_Dan_Lab2.Pages
+namespace Sabados_Dan_Lab2.Pages.Categories
 {
     public class IndexModel : PageModel
     {
@@ -19,11 +19,11 @@ namespace Sabados_Dan_Lab2.Pages
             _context = context;
         }
 
-        public IList<Author> Authors { get;set; } = default!;
+        public IList<Category> Category { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Authors = await _context.Authors.ToListAsync();
+            Category = await _context.Category.ToListAsync();
         }
     }
 }
